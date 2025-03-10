@@ -88,73 +88,85 @@
 
   </div>
 
-  <script>
-    const body = document.querySelector("body");
-    const swalst = Swal.mixin({
-      timer: 2300,
-      allowOutsideClick: false,
-      showConfirmButton: false,
-      timerProgressBar: true,
-      imageHeight: 90,
-    });
-    audio = new Audio('' + linkmp3.src);
-    ftganti = 0; fungsi = 0; fungsiAwal = 0; deffotostiker = fotostiker.src;
-    function berjatuhan() {
-      const heart = document.createElement("div");
-      heart.className = "fas fa-snowflake";
-      heart.style.left = (Math.random() * 90) + "vw";
-      heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
-      body.appendChild(heart);
-    }
-    setInterval(function() {
-      var heartArr = document.querySelectorAll(".fa-snowflake");
-      if (heartArr.length > 100) { heartArr[0].remove(); }
-    }, 100);
-    Content.style = "opacity:1;margin-top:16vh";
-    const swals = Swal.mixin({
-      allowOutsideClick: false,
-      cancelButtonColor: '#FF0040',
-      imageHeight: 80,
-    });
-    
-    document.getElementById("kadoIn").onclick = function() {
-      if (fungsiAwal == 0) {
-        audio.play();
-        fungsiAwal = 1;
-        kadoIn.style = "transition:all .8s ease;transform:scale(10);opacity:0";
-        wallpaper.style = "transform: scale(1.5);";
-        ket.style = "display:none";
-        setTimeout(initengahan, 300);
-        setTimeout(inipesan, 500);
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Delay untuk menampilkan pesan "Ciee.. Ada yang Ultah Nih"
+  var pesan3 = document.getElementById("pesan3");
+  setTimeout(function(){
+    pesan3.style.transition = "opacity 1s";
+    pesan3.style.opacity = 1;
+  }, 3000); // penundaan 3 detik
+  
+  // Atur posisi tombol agar sejajar dan beri jarak
+  var interval = setInterval(function() {
+    // Ambil semua tombol dari DOM
+    var buttons = document.querySelectorAll("button");
+    var btnMau, btnEngga;
+    buttons.forEach(function(btn) {
+      if (btn.textContent.trim() === tompositif) {
+        btnMau = btn;
       }
-    }
-    
-    async function inipesan() {
-      var { value: nama } = await swals.fire({
-        title: 'Masukin Nama Kamu', input: 'text',
-      });
-      if (nama && nama.length < 11) {
-        window.nama = nama;
-        vketikhalo = "Hai, " + nama + " ✨";
-        mulainama();
-      } else {
-        await swals.fire('Ups!', 'Nama tidak boleh kosong atau lebih dari 10 karakter, ya!');
-        inipesan();
+      if (btn.textContent.trim() === tomnegatif) {
+        btnEngga = btn;
       }
-    }
-    
-    //Variable Pertanyaan Akhir
-    var tanya = 'Mau Kado Gak Nih? 😶';
-    var opstanya = 'Ayo jawab 😆';
-    var tompositif = 'Mau';
-    var tomnegatif = 'Engga';
+    });
+    if (btnMau && btnEngga) {
+      // Tetapkan posisi absolute agar tombol bisa dipindah secara dinamis
+      btnMau.style.position = "absolute";
+      btnEngga.style.position = "absolute";
       
-    async function menuju() {
-      pesanwhatsapp = "Makasii udah ngucapin " + nama + " ultah ><";
-      await swals.fire('OK!', 'Kirim jawabannya ke WhatsApp aku, ya!', 'success');
-      window.location = "https://api.whatsapp.com/send?phone=6285156071822&text=wahhh, terimakasih banget abagnku yang tampan."+ pesanwhatsapp;
+      // Atur posisi awal (dengan persentase agar responsif)
+      btnEngga.style.left = "20%";
+      btnEngga.style.top = "85%";
+      btnMau.style.left = "60%";
+      btnMau.style.top = "85%";
+      
+      // Fungsi untuk memindahkan tombol "Mau" secara acak
+      function moveMauButton() {
+        var nonOverlap = false;
+        var newLeft, newTop;
+        while (!nonOverlap) {
+          // Hitung posisi acak berdasarkan ukuran layar dan tombol
+          newLeft = Math.floor(Math.random() * (window.innerWidth - btnMau.offsetWidth));
+          newTop = Math.floor(Math.random() * (window.innerHeight - btnMau.offsetHeight));
+          // Sementara set posisi baru
+          btnMau.style.left = newLeft + "px";
+          btnMau.style.top = newTop + "px";
+          var rectMau = btnMau.getBoundingClientRect();
+          var rectEngga = btnEngga.getBoundingClientRect();
+          // Cek apakah tombol "Mau" tidak bertumpuk dengan tombol "Engga"
+          if (!(rectMau.right > rectEngga.left &&
+                rectMau.left < rectEngga.right &&
+                rectMau.bottom > rectEngga.top &&
+                rectMau.top < rectEngga.bottom)) {
+            nonOverlap = true;
+          }
+        }
+      }
+      
+      // Event listener untuk desktop: pindahkan tombol saat mouseover
+      btnMau.addEventListener("mouseover", function(e) {
+        e.preventDefault();
+        moveMauButton();
+      });
+      
+      // Event listener untuk mobile: pindahkan tombol saat layar disentuh
+      btnMau.addEventListener("touchstart", function(e) {
+        e.preventDefault();
+        moveMauButton();
+      });
+      
+      // Cegah klik pada tombol "Mau"
+      btnMau.addEventListener("click", function(e) {
+        e.preventDefault();
+      });
+      
+      clearInterval(interval);
     }
-  </script>
+  }, 500);
+});
+</script>
+
   <script src="https://malasid.github.io/html/hbd.js"></script>
   <!-- Added script: Delay pesan dan pengaturan tombol dengan jarak tambahan -->
   <script>
