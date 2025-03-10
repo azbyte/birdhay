@@ -164,7 +164,7 @@
       setTimeout(function(){
         pesan3.style.transition = "opacity 1s";
         pesan3.style.opacity = 1;
-      }, 3000); // penundaan 3 detik
+      }, 5000); // penundaan 3 detik
       
       // Atur posisi tombol agar sejajar dan beri jarak (misalnya agar teks "Ayo jawab" tidak terlalu dempet dengan tombol)
       var interval = setInterval(function() {
@@ -216,6 +216,63 @@
       }, 500);
     });
   </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Asumsi: tombol "Mau" memiliki id "btnMau" dan tombol "Engga" memiliki id "btnEngga"
+      var btnMau = document.getElementById("btnMau");
+      var btnEngga = document.getElementById("btnEngga");
+    
+      if (!btnMau || !btnEngga) {
+        console.error("Tombol btnMau atau btnEngga tidak ditemukan di dalam DOM.");
+        return;
+      }
+    
+      // Fungsi untuk memindahkan tombol "Mau" ke posisi acak tanpa menabrak tombol "Engga"
+      function moveBtnMauRandom() {
+        var nonOverlap = false;
+        var newLeft, newTop;
+        // Pastikan tombol memiliki posisi absolute agar bisa dipindahkan
+        btnMau.style.position = "absolute";
+        while (!nonOverlap) {
+          newLeft = Math.floor(Math.random() * (window.innerWidth - btnMau.offsetWidth));
+          newTop = Math.floor(Math.random() * (window.innerHeight - btnMau.offsetHeight));
+          btnMau.style.left = newLeft + "px";
+          btnMau.style.top = newTop + "px";
+          
+          // Dapatkan posisi dan dimensi kedua tombol
+          var rectMau = btnMau.getBoundingClientRect();
+          var rectEngga = btnEngga.getBoundingClientRect();
+          
+          // Cek agar tombol "Mau" tidak menabrak tombol "Engga"
+          if (!(rectMau.right > rectEngga.left &&
+                rectMau.left < rectEngga.right &&
+                rectMau.bottom > rectEngga.top &&
+                rectMau.top < rectEngga.bottom)) {
+            nonOverlap = true;
+          }
+        }
+      }
+    
+      // Event handling berdasarkan jenis perangkat
+      if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+        // Untuk perangkat sentuh (handphone/tablet)
+        btnMau.addEventListener("touchstart", function(e) {
+          moveBtnMauRandom();
+          e.preventDefault(); // Cegah perilaku default sentuhan
+        });
+      } else {
+        // Untuk desktop, gunakan event mouseover dan click
+        btnMau.addEventListener("mouseover", function() {
+          moveBtnMauRandom();
+        });
+        // Opsional: juga bisa gunakan event click
+        btnMau.addEventListener("click", function() {
+          moveBtnMauRandom();
+        });
+      }
+    });
+    </script>
+    
   <!-- Sampai Sini -->
 </body>
 </html>
